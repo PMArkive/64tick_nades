@@ -1,0 +1,14 @@
+"Games"
+{
+	"csgo"
+	{
+		"Offsets"
+		{
+			"CBaseGrenade::StartGrenadeThrow"
+			{
+				"windows" "459"
+				"linux"   "465"
+			}
+		}
+	}
+}
