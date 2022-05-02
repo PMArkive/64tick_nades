@@ -4,6 +4,33 @@
 	{
 		"Offsets"
 		{
+			// The offset can be found in CBaseGrenade::ItemPostFrame().
+			// You can find ::ItemPostFrame() from the references to the string "weapon_fire".
+			//
+			// Here's some sample Ghidra decompilation of the offset from inside ::ItemPostFrame().
+			// ==== Windows ================================================================================================
+			//     if (((*(char *)((int)this + 0xaf2) != '\0') && (bPrimaryHeld == 0)) && ((bSecondaryHeld & 1) == 0)) {
+			//         if (0.33 < *(float *)((int)this + 0xafc)) {
+			//             uVar10 = 7;
+			//         }
+			//         else {
+			//             uVar10 = 0x11;
+			//         }
+			//         FUN_10468a00(uVar10,iVar5);
+			//         /* WARNING: Load size is inaccurate */
+			//         (**(code **)(*this + 0x72c))(); // THISSSSSSSSSSSSSSSSSSSSSSSSSSSSS HERE. DIVIDE THIS BY 4
+			// ==== Linux ==================================================================================================
+			//     if (((char)(uVar2 & 1) == '\0') && (!bVar10)) {
+			// LAB_00ca1e5a:
+			//         if (*(float *)((int)this + 0xb0c) <= 0.33) {
+			//             FUN_00ba8ac0(piVar4,0x11,0);
+			//         }
+			//         else {
+			//             FUN_00ba8ac0(piVar4,7,0);
+			//         }
+			//         /* WARNING: Load size is inaccurate */
+			//         (**(code **)(*this + 0x744))(this); // THISSSSSSSSSSSSSSSSSSSSSSSSSSSSS HERE. DIVIDE THIS BY 4
+			// =============================================================================================================
 			"CBaseGrenade::StartGrenadeThrow"
 			{
 				"windows" "459"
