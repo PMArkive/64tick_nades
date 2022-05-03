@@ -50,10 +50,13 @@ public void OnEntityCreated(int entity, const char[] classname)
 public MRESReturn DHook_StartGrenadeThrow_Post(int pThis)
 {
 	/*
+	Throwtime = curtime() + 0.1;
 	(1/64) * 6   = 0.09375
-	(1/64) * 7   = 0.109375
+	               0.1
+	(1/64) * 7   = 0.109375  // throws here
 	(1/128) * 12 = 0.09375
-	(1/128) * 13 = 0.1015625
+	               0.1
+	(1/128) * 13 = 0.1015625 // throws here
 	(1/128) * 14 = 0.109375
 	*/
 	float newtime = GetGameTime() + 0.109375;
