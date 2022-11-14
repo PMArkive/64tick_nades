@@ -1,12 +1,10 @@
 #include <sourcemod>
 #include <dhooks>
 
-DynamicHook gH_StartGrenadeThrow;
+DynamicDetour gH_StartGrenadeThrow;
 
 public void OnPluginStart()
 {
-	int offset;
-
 	GameData gamedata = new GameData("64tick_nades.games");
 
 	if (gamedata == null)
@@ -14,36 +12,19 @@ public void OnPluginStart()
 		SetFailState("Failed to load 64tick_nades gamedata");
 	}
 
-	if ((offset = gamedata.GetOffset("CBaseGrenade::StartGrenadeThrow")) == -1)
+	gH_StartGrenadeThrow = new DynamicDetour(Address_Null, CallConv_THISCALL, ReturnType_Void, ThisPointer_CBaseEntity);
+
+	if (!DHookSetFromConf(gH_StartGrenadeThrow, gamedata, SDKConf_Signature, "CBaseGrenade::StartGrenadeThrow"))
 	{
-		LogError("Couldn't get the offset for \"CBaseGrenade::StartGrenadeThrow\" - make sure your gamedata is updated!");
+		SetFailState("Couldn't get the signature for \"CBaseGrenade::StartGrenadeThrow\" - make sure your gamedata is updated!");
 	}
 
-	gH_StartGrenadeThrow = new DynamicHook(offset, HookType_Entity, ReturnType_Void, ThisPointer_CBaseEntity);
+	if (!gH_StartGrenadeThrow.Enable(Hook_Post, DHook_StartGrenadeThrow_Post))
+	{
+		SetFailState("Couldn't enable detour for \"CBaseGrenade::StartGrenadeThrow\" - make sure your gamedata is updated!");
+	}
 
 	delete gamedata;
-}
-
-public void OnEntityCreated(int entity, const char[] classname)
-{
-	static const char nades[][] = {
-		"weapon_hegrenade",
-		"weapon_smokegrenade",
-		"weapon_flashbang",
-		"weapon_molotov",
-		"weapon_incgrenade",
-		"weapon_decoy"
-	};
-
-	for (int i = 0; i < sizeof(nades); i++)
-	{
-		if (StrEqual(classname, nades[i]))
-		{
-			//PrintToServer("hooking %s %d", classname, entity);
-			gH_StartGrenadeThrow.HookEntity(Hook_Post, entity, DHook_StartGrenadeThrow_Post);
-			return;
-		}
-	}
 }
 
 // void CBaseGrenade::StartGrenadeThrow()
