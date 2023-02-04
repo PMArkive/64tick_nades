@@ -9,13 +9,13 @@
 			//    then go UP one function...  (CTRL+Up in Ghidra)
 			// to find on linux:
 			//    goto the function that references "m_fThrowTime"
-			//    then go UP six functions... (CTRL+Up in Ghidra)
+			//    then go UP seven functions... (CTRL+Up in Ghidra)
 			// and you should something like this near the top:
 			//    fVar4 = *(float *)(DAT_0178992c + 0x10) + 0.1;
 			"CBaseGrenade::StartGrenadeThrow"
 			{
 				"windows" "\x55\x8B\xEC\x83\xE4\xF8\x81\xEC\xF0\x00\x00\x00\xA1"
-				"linux"   "\x55\x89\xE5\x56\x53\x81\xEC\x10\x01\x00\x00\xA1"
+				"linux"   "\x55\x89\xE5\x57\x56\x53\x81\xEC\x0C\x01\x00\x00\x8B\x5D\x2A\x65\xA1"
 			}
 		}
 	}
